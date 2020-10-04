@@ -11,6 +11,7 @@ struct Person
 	string m_Phone;
 	string m_Addr;
 };
+
 struct Addressbooks
 {
 	// Use a array to save the contacts.
@@ -109,6 +110,138 @@ void showPerson(Addressbooks* abs)
 	system("cls");
 }
 
+// Search contacts to comfirm is exist or not.
+int isExist(Addressbooks* abs, string name)
+{
+	for (int i = 0;i < abs->m_Size;i++)
+	{
+		if (abs->personArray[i].m_Name == name)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+void deletePerson(Addressbooks* abs)
+{
+	cout << "Please input the one you want to delete:" << endl;
+	string name;
+	cin >> name;
+	//If ret == -1 ¡ú Not found
+	//If ret != -1 ¡ú Found
+	int ret = isExist(abs, name);
+	if (ret != -1)
+	{
+		for (int i = ret; i < abs->m_Size; i++)
+		{
+			abs->personArray[i] = abs->personArray[i + 1];
+		}
+		//Renew contact list.
+		abs->m_Size--;
+		cout << "Deleted." << endl;
+	}
+	else
+	{
+		cout << "The Person Is Not Found." << endl;
+	}
+}
+
+void findPerson(Addressbooks* abs)
+{
+	cout << "Please input the person you are searching for:" << endl;
+	string name;
+	cin >> name;
+	int ret = isExist(abs, name);
+	if (ret != -1)
+	{
+		cout << "Name:" << abs->personArray[ret].m_Name << "\t";
+		cout << "Gender:" << abs->personArray[ret].m_Gender << "\t";
+		cout << "Ages:" << abs->personArray[ret].m_Age << "\t";
+		cout << "Phone number:" << abs->personArray[ret].m_Phone << "\t";
+		cout << "Addresss:" << abs->personArray[ret].m_Addr << endl;
+	}
+	else
+	{
+		cout << "The person is not found." << endl;
+	}
+	system("pause");
+	system("cls");
+}
+
+void modifyPerson(Addressbooks* abs)
+{
+	cout << "Please input the one you want to modify." << endl;
+	string name;
+	cin >> name;
+	int ret = isExist(abs, name);
+	if (ret != -1)
+	{
+		// Name
+		string name;
+		cout << "Please input a name: " << endl;
+		cin >> name;
+		abs->personArray[ret].m_Name = name;
+
+		// Gender
+		int gender = 0;
+		cout << "Please enter the gender: " << endl;
+		cout << "1 for Male " << endl;
+		cout << "2 for Female " << endl;
+		while (true)
+		{
+			cin >> gender;
+			if (gender == 1 || gender == 2)
+			{
+				abs->personArray[ret].m_Gender = gender;
+				break;
+			}
+			cout << "The system is only accept number 1 or 2, please enter again." << endl;
+		}
+
+		// Age
+		cout << "Please enter the ages:" << endl;
+		int age = 0;
+		while (true)
+		{
+			cin >> age;
+			if (age > 0 && age < 130)
+			{
+				abs->personArray[ret].m_Age = age;
+				break;
+			}
+			cout << "The system is only accept number 1 - 129, please enter again." << endl;
+		}
+
+		// Phone number
+		cout << "Please enter the phone number: " << endl;
+		string phone;
+		cin >> phone;
+		abs->personArray[ret].m_Phone = phone;
+
+		// Address
+		cout << "Please enter the address: " << endl;
+		string addr;
+		cin >> addr;
+		abs->personArray[ret].m_Addr = addr;
+
+		cout << "Successful!" << endl;
+	}
+	else
+	{
+		cout << "The Person Is Not Found." << endl;
+	}
+	system("pause");
+	system("cls");
+}
+
+void cleanPerson(Addressbooks* abs)
+{
+	abs->m_Size = 0;
+	cout << "Contact list is empty now." << endl;
+	system("pause");
+	system("cls");
+}
 void showMenu()
 {
 	cout << "*******************************" << endl;
@@ -145,12 +278,31 @@ int main()
 			showPerson(&abs);
 			break;
 		case 3:
+		{
+			/*
+			cout << "Please enter a name:" << endl;
+			string name;
+			cin >> name;
+			if (isExist(&abs, name) == -1)
+			{
+				cout << "The Person Is Not Found." << endl;
+			}
+			else
+			{
+				cout << "Found" << endl;
+			}
+			*/
+		}
+			deletePerson(&abs);
 			break;
 		case 4:
-			break;
+			findPerson(&abs);
+;			break;
 		case 5:
+			modifyPerson(&abs);
 			break;
 		case 6:
+			cleanPerson(&abs);
 			break;
 		case 0:
 			cout << "Welcome to use our contact system next time." << endl;
